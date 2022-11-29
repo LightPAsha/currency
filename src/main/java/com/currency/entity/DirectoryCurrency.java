@@ -1,5 +1,6 @@
 package com.currency.entity;
 
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

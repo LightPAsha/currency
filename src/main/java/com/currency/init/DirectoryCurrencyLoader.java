@@ -26,6 +26,7 @@ public class DirectoryCurrencyLoader implements CommandLineRunner {
 
             currencyRepository.saveAll(List.of(currencyEUR, currencyUSD, currencyUAH));
 
+
         }
     }
 }
