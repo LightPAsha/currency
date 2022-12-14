@@ -20,9 +20,9 @@ public class DirectoryCurrencyLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
     Long count = currencyRepository.countAll();
         if (count < 1) {
-            DirectoryCurrency currencyUSD = new DirectoryCurrency("USD", 840, "Долар");
+            DirectoryCurrency currencyUSD = new DirectoryCurrency("USD", 980, "Долар");
             DirectoryCurrency currencyEUR = new DirectoryCurrency("EUR", 978, "Евро");
-            DirectoryCurrency currencyUAH = new DirectoryCurrency("UAH", 980, "Гривна");
+            DirectoryCurrency currencyUAH = new DirectoryCurrency("UAH", 840, "Гривна");
 
             currencyRepository.saveAll(List.of(currencyEUR, currencyUSD, currencyUAH));
 

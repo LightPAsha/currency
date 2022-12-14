@@ -13,8 +13,6 @@ public interface JournalCurrencyRepository extends JpaRepository <JournalCurrenc
     @Query("select count(id) from JournalCurrency")
     Long countAll();
 
-//    @Query("SELECT u FROM HistoryCurrency u WHERE u.dateCreate = :dateCreate and u.code = :code")
-
     @Query("select c from JournalCurrency c  where c.dateRecord =:date and c.currency =:code")
     JournalCurrency getByCurrencyByCodeAndDate(LocalDate date, int code);
 
