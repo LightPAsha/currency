@@ -10,6 +10,7 @@ import com.currency.repository.JournalCurrencyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.cache.annotation.Cacheable;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -26,7 +27,7 @@ public class JournalCurrencyService {
     @Autowired
     private ConnectionMono connectionMono;
 
-
+    @Cacheable(value = "currency", key="{#mnemonic, #date}")
     public JournalCurrency getByCurrency(String mnemonic, LocalDate date) {
         int code = this.checkMnemonicGetCode(mnemonic);
         JournalCurrency currency = journalCurrencyRepository.getByCurrencyByCodeAndDate(date, code);
