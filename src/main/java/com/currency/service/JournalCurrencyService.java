@@ -28,7 +28,7 @@ public class JournalCurrencyService {
     private ConnectionMono connectionMono;
 
     @Cacheable(value = "currency", key="{#mnemonic, #date}")
-    public JournalCurrency getByCurrency(String mnemonic, LocalDate date) {
+    public JournalCurrency getByCurrency(String mnemonic, LocalDate date) throws NotFoundException {
         int code = this.checkMnemonicGetCode(mnemonic);
         JournalCurrency currency = journalCurrencyRepository.getByCurrencyByCodeAndDate(date, code);
         if (currency == null) {
@@ -45,7 +45,7 @@ public class JournalCurrencyService {
         journalCurrencyRepository.save(new JournalCurrency(createCurrency.getCurrency(), createCurrency.getDateRecord(), createCurrency.getRateBuy(), createCurrency.getRateSell()));
     }
 
-    public JournalCurrency getByCurrency(String mnemonic) throws IOException {
+    public JournalCurrency getByCurrency(String mnemonic) throws NotFoundException,  IOException{
         int code = this.checkMnemonicGetCode(mnemonic);
         JournalCurrency currency = journalCurrencyRepository.getByCurrencyByCodeAndDate(LocalDate.now(), code);
         if (currency == null) {
@@ -61,7 +61,7 @@ public class JournalCurrencyService {
         return currency;
     }
 
-    private int checkMnemonicGetCode(String mnemonic) {
+    private int checkMnemonicGetCode(String mnemonic) throws NotFoundException {
         DirectoryCurrency directoryCurrency = directoryCurrencyService.getByMnemonic(mnemonic);
         if (directoryCurrency == null) {
             throw new NotFoundException("Mnemonic " + mnemonic + " not found.");

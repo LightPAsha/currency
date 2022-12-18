@@ -2,6 +2,7 @@ package com.currency.controller;
 
 import com.currency.dto.CreateCurrency;
 import com.currency.entity.JournalCurrency;
+import com.currency.exception.NotFoundException;
 import com.currency.service.JournalCurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +19,7 @@ public class JournalCurrencyController {
 
     @RequestMapping(method = RequestMethod.GET, value = ("/currency"))
     public JournalCurrency getCurrency(@RequestParam String mnemonic,
-                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate date) throws IOException {
+                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate date) throws IOException, NotFoundException {
         if (date == null) {
             return journalCurrencyService.getByCurrency(mnemonic);
         }
