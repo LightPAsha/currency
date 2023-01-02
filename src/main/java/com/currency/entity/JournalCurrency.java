@@ -1,16 +1,12 @@
 package com.currency.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -24,15 +20,18 @@ public class  JournalCurrency{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
     @JsonProperty("currencyCodeA")
-    private int currency;
+    @Column(name = "currency_A")
+    private int currencyA;
+    @JsonProperty("currencyCodeB")
+    @Column(name = "currency_B")
+    private int currencyB;
     private LocalDate dateRecord;
     private BigDecimal rateBuy;
     private BigDecimal rateSell;
 //    {"currencyCodeA":840,"currencyCodeB":980,"date":1667945410,"rateBuy":36.65,"rateSell":37.4406}
 
-
-    public JournalCurrency(int currency, LocalDate dateRecord, BigDecimal rateBuy, BigDecimal rateSell) {
-        this.currency = currency;
+    public JournalCurrency(int currencyA, LocalDate dateRecord, BigDecimal rateBuy, BigDecimal rateSell) {
+        this.currencyA = currencyA;
         this.dateRecord = dateRecord;
         this.rateBuy = rateBuy;
         this.rateSell = rateSell;

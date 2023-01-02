@@ -13,7 +13,9 @@ public interface JournalCurrencyRepository extends JpaRepository <JournalCurrenc
     @Query("select count(id) from JournalCurrency")
     Long countAll();
 
-    @Query("select c from JournalCurrency c  where c.dateRecord =:date and c.currency =:code")
+    @Query("select c from JournalCurrency c  where c.dateRecord =:date and c.currencyA =:code")
     JournalCurrency getByCurrencyByCodeAndDate(LocalDate date, int code);
 
+    @Query("select c from JournalCurrency c where c.currencyA =:codeA and c.currencyB =:codeB")
+    JournalCurrency getByCurrencyCodeAndB(int codeA, int codeB);
 }

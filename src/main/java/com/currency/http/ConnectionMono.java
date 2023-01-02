@@ -1,4 +1,4 @@
-package com.currency.connectionBank;
+package com.currency.http;
 
 import com.currency.entity.JournalCurrency;
 import com.fasterxml.jackson.core.type.TypeReference;

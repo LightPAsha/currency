@@ -1,6 +1,6 @@
 package com.currency.service;
 
-import com.currency.connectionBank.ConnectionMono;
+import com.currency.http.ConnectionMono;
 import com.currency.dto.CreateCurrency;
 import com.currency.entity.DirectoryCurrency;
 import com.currency.entity.JournalCurrency;
@@ -8,9 +8,9 @@ import com.currency.exception.AlreadyAvailableException;
 import com.currency.exception.NotFoundException;
 import com.currency.repository.JournalCurrencyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import org.springframework.cache.annotation.Cacheable;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -27,7 +27,7 @@ public class JournalCurrencyService {
     @Autowired
     private ConnectionMono connectionMono;
 
-    @Cacheable(value = "currency", key="{#mnemonic, #date}")
+    @Cacheable(value = "currency", key = "{#mnemonic, #date}")
     public JournalCurrency getByCurrency(String mnemonic, LocalDate date) throws NotFoundException {
         int code = this.checkMnemonicGetCode(mnemonic);
         JournalCurrency currency = journalCurrencyRepository.getByCurrencyByCodeAndDate(date, code);
@@ -45,13 +45,27 @@ public class JournalCurrencyService {
         journalCurrencyRepository.save(new JournalCurrency(createCurrency.getCurrency(), createCurrency.getDateRecord(), createCurrency.getRateBuy(), createCurrency.getRateSell()));
     }
 
-    public JournalCurrency getByCurrency(String mnemonic) throws NotFoundException,  IOException{
+    public JournalCurrency getByCurrencyCodeAndB(int codeA, int codeB) throws IOException {
+        JournalCurrency currency = journalCurrencyRepository.getByCurrencyCodeAndB(codeA, codeB);
+        if (currency == null) {
+            List<JournalCurrency> currencies = connectionMono.connection();
+            currency = currencies.stream().filter(f -> f.getCurrencyA() == codeA && f.getCurrencyB() == codeB).findFirst().orElse(null);
+            if (currency != null) {
+                currency.setDateRecord(LocalDate.now());
+                journalCurrencyRepository.save(currency);
+            }
+        }
+        return currency;
+    }
+
+
+    public JournalCurrency getByCurrency(String mnemonic) throws NotFoundException, IOException {
         int code = this.checkMnemonicGetCode(mnemonic);
         JournalCurrency currency = journalCurrencyRepository.getByCurrencyByCodeAndDate(LocalDate.now(), code);
         if (currency == null) {
             List<JournalCurrency> currencies = connectionMono.connection();
             currency = currencies.stream()
-                    .filter(f -> f.getCurrency() == code)
+                    .filter(f -> f.getCurrencyA() == code)
                     .findFirst().orElse(null);
             if (currency != null) {
                 currency.setDateRecord(LocalDate.now());

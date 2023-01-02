@@ -30,4 +30,10 @@ public class JournalCurrencyController {
     public void getCurrency(@RequestBody CreateCurrency createCurrency) throws IOException {
          journalCurrencyService.createCurrency(createCurrency);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = ("/currencyconvercy"))
+    public JournalCurrency getByCurrencyCodeAndB(@RequestParam int codeA, @RequestParam int codeB) throws IOException {
+        return journalCurrencyService.getByCurrencyCodeAndB(codeA,codeB);
+    }
 }
+
